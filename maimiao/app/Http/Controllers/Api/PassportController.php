@@ -10,6 +10,6 @@ class PassportController extends Controller
 {
     public function login(Request $request)
     {
-        $user = Auth::user();
+
     }
 }
