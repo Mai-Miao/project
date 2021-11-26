@@ -2,11 +2,12 @@
 
 namespace App\Console\Commands\Ranks;
 
+use App\Models\People;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Facades\Redis;
 
-class TestRanking extends Command
-{
+class TestRanking extends Command {
     /**
      * The name and signature of the console command.
      *
@@ -21,6 +22,8 @@ class TestRanking extends Command
      */
     protected $description = '用户排行榜';
 
+    protected $redis;
+
     /**
      * Create a new command instance.
      *
@@ -28,7 +31,7 @@ class TestRanking extends Command
      */
     public function __construct()
     {
-        parent::__construct();
+        $this->redis = Redis::connection('default');
     }
 
     /**
@@ -38,6 +41,8 @@ class TestRanking extends Command
      */
     public function handle()
     {
-       info(now());
+        foreach (People::cursor() as $user) {
+            $this->redis->zadd(People::USER_RANK, [$user->id => $user->sort]);
+        }
     }
 }
