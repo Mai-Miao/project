@@ -32,6 +32,7 @@ class TestRanking extends Command {
     public function __construct()
     {
         $this->redis = Redis::connection('default');
+        parent::__construct();
     }
 
     /**
